@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:LenovoController"
         mc:Ignorable="d"
         Title="Lenovo Controller" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize" x:Name="mainWindow"
-        FontSize="14">
+        FontSize="14" Closing="OnClose" StateChanged="OnStateChanged" IsVisibleChanged="OnIsVisibleChanged"
+        >
     <StackPanel Margin="15">
         <Grid>
             <Grid.RowDefinitions>

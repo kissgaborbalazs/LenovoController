@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace LenovoController
         private readonly FnLockFeature _fnLockFeature = new FnLockFeature();
         private readonly OverDriveFeature _overDriveFeature = new OverDriveFeature();
         private readonly TouchpadLockFeature _touchpadLockFeature = new TouchpadLockFeature();
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private WindowState storedWindowState = WindowState.Normal;
 
         public MainWindow()
         {
@@ -30,6 +33,14 @@ namespace LenovoController
             _powerModeButtons = new[] {radioQuiet, radioBalance, radioPerformance};
             _batteryButtons = new[] {radioConservation, radioNormalCharge, radioRapidCharge};
             _alwaysOnUsbButtons = new[] {radioAlwaysOnUsbOff, radioAlwaysOnUsbOnWhenSleeping, radioAlwaysOnUsbOnAlways};
+
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.BalloonTipText = "The app has been minimized. Click the try icon to show.";
+            notifyIcon.BalloonTipTitle = "Lenovo Controller";
+            notifyIcon.Text = "Lenovo";
+            notifyIcon.Icon = new System.Drawing.Icon("..\\lenovo.ico");
+            notifyIcon.Click += new EventHandler(notifyIcon_Click);
+            
             Refresh();
         }
 
@@ -135,5 +146,47 @@ namespace LenovoController
                 : FnLockState.Off;
             _fnLockFeature.SetState(state);
         }
+
+        void OnClose(object sender, CancelEventArgs args)
+        {
+            notifyIcon.Dispose();
+            notifyIcon = null;
+        }
+
+        void OnStateChanged(object sender, EventArgs args)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                if (notifyIcon != null)
+                    notifyIcon.ShowBalloonTip(2000);
+            }
+            else
+                storedWindowState = WindowState;
+        }
+
+        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            CheckTrayIcon();
+        }
+
+        void notifyIcon_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = storedWindowState;
+        }
+        void CheckTrayIcon()
+        {
+            ShowTrayIcon(!IsVisible);
+        }
+
+        void ShowTrayIcon(bool show)
+        {
+            if (notifyIcon != null)
+                notifyIcon.Visible = show;
+        }
+
+
+
     }
 }
