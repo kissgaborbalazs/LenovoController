@@ -38,7 +38,7 @@ namespace LenovoController
             notifyIcon.BalloonTipText = "The app has been minimized. Click the try icon to show.";
             notifyIcon.BalloonTipTitle = "Lenovo Controller";
             notifyIcon.Text = "Lenovo";
-            notifyIcon.Icon = new System.Drawing.Icon("..\\lenovo.ico");
+            notifyIcon.Icon = new System.Drawing.Icon("lenovo.ico");
             notifyIcon.Click += new EventHandler(notifyIcon_Click);
             
             Refresh();
