@@ -1,0 +1,1 @@
+python3.9 C:\_Pack_\LenovoController\BatteryTreshold.py 75
